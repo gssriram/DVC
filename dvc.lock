@@ -1,0 +1,85 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/mushrooms.csv
+    deps:
+    - path: data/mushrooms.csv
+      hash: md5
+      md5: 20e36f0bcc0fec359eb394ee947237dd
+      size: 374003
+    - path: src/prepare.py
+      hash: md5
+      md5: 722708a4f26a5ce33e3f52ba6d1c5876
+      size: 1066
+    params:
+      params.yaml:
+        prepare.seed: 15
+        prepare.split: 0.2
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 4d420880f64f7daa1b49514ea882c02e.dir
+      size: 382430
+      nfiles: 2
+  featurise:
+    cmd: python src/featurization.py data/prepared data/encoded
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 4d420880f64f7daa1b49514ea882c02e.dir
+      size: 382430
+      nfiles: 2
+    - path: src/featurization.py
+      hash: md5
+      md5: cb1fb78518226fe3c75ee44f32362b11
+      size: 1348
+    outs:
+    - path: data/encoded
+      hash: md5
+      md5: 011280b3d68180fece185a38eac52805.dir
+      size: 383718
+      nfiles: 2
+  train:
+    cmd: python src/train.py data/encoded model.pkl
+    deps:
+    - path: data/encoded
+      hash: md5
+      md5: 011280b3d68180fece185a38eac52805.dir
+      size: 383718
+      nfiles: 2
+    - path: src/train.py
+      hash: md5
+      md5: 60a3b87adce252f8b44fb10ca81dd92e
+      size: 1486
+    params:
+      params.yaml:
+        train.min_split: 5
+        train.n_est: 60
+        train.seed: 23
+    outs:
+    - path: model.pkl
+      hash: md5
+      md5: cedf0a480df67427a4444ff8a6000b2b
+      size: 298252
+  evaluate:
+    cmd: python src/evaluate.py model.pkl data/encoded
+    deps:
+    - path: data/encoded
+      hash: md5
+      md5: 011280b3d68180fece185a38eac52805.dir
+      size: 383718
+      nfiles: 2
+    - path: model.pkl
+      hash: md5
+      md5: cedf0a480df67427a4444ff8a6000b2b
+      size: 298252
+    - path: src/evaluate.py
+      hash: md5
+      md5: 36079dd0a267cf9222c891290ec7735c
+      size: 3285
+    outs:
+    - path: eval
+      hash: md5
+      md5: 3c303b4de6f1a1d68531d02193dd05ca.dir
+      size: 572361
+      nfiles: 8

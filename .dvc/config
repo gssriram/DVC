@@ -1,0 +1,4 @@
+[core]
+    remote = tutremote
+['remote "tutremote"']
+    url = ~/assignments/dvc-storage
