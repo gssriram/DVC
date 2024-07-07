@@ -1,0 +1,8 @@
+prepare:
+  split: 0.20
+  seed: 15
+
+train:
+  seed: 23
+  n_est: 60
+  min_split: 5
