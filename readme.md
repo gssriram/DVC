@@ -32,32 +32,44 @@
 	
 	Add the following stages to the pipeline.
 
+        Prepare Stage 
+
         dvc stage add -n prepare -d src/prepare.py -d data/mushrooms.csv \
                     -p prepare.seed -p prepare.split -o data/prepared \
                     python src/prepare.py data/mushrooms.csv
 
+        Featurise Stage
+
 		dvc stage add -n featurise -d src/featurization.py -d data/prepared \
                     -o data/encoded python src/featurization.py data/prepared data/encoded
+
+        Train Stage
 
 		dvc stage add -n train -p train.seed -p train.n_est -p train.min_split \
                     -d src/train.py -d data/encoded -o model.pkl \
                     python src/train.py data/encoded model.pkl
 
+        Adding other files to commit
+
 		git add .gitignore data/.gitignore dvc.yaml
 		git commit -m "pipeline defined"   
 	
 	Visualize the pipeline
+
 		dvc dag
 	
 	Run/Reproduce the pipeline
+
 		dvc repro
 		
 	Add and track experiments.
+
         dvc stage add -n evaluate -d src/evaluate.py \
                     -d model.pkl -d data/encoded -o eval \
                     python src/evaluate.py model.pkl data/encoded
 
 	Run/Reproduce the pipeline
+
 		dvc repro
 
 	git add .gitignore dvc.yaml dvc.lock eval
