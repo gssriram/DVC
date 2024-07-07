@@ -4,5 +4,5 @@ prepare:
 
 train:
   seed: 23
-  n_est: 60
-  min_split: 5
+  n_est: 1
+  min_split: 50
