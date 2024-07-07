@@ -1,0 +1,29 @@
+stages:
+  prepare:
+    cmd: src/prepare.py data/mushrooms.csv
+    deps:
+    - data/mushrooms.csv
+    - src/prepare.py
+    params:
+    - prepare.seed
+    - prepare.split
+    outs:
+    - data/prepared
+  featurise:
+    cmd: python src/featurization.py data/prepared data/encoded
+    deps:
+    - data/prepared
+    - src/featurization.py
+    outs:
+    - data/encoded
+  train:
+    cmd: python src/train.py data/encoded model.pkl
+    deps:
+    - data/encoded
+    - src/train.py
+    params:
+    - train.min_split
+    - train.n_est
+    - train.seed
+    outs:
+    - model.pkl
